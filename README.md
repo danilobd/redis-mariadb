@@ -26,10 +26,10 @@ Script de comparação do Redis com MariaDB
 # REDIS
 
 	sudo apt install redis-server
-	cd /etc/redis
 
 /*TO REDIS SAVE ON DISK*/
 
+	cd /etc/redis
 	sudo nano redis.conf
 
 comment: 'save 900 1'
