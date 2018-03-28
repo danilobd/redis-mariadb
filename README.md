@@ -16,21 +16,21 @@ sudo mysql_secure_installation
 
 #PHP
 
-sudo apt install php
+	sudo apt install php
 
 #COMPOSER
 
-sudo apt install composer
-composer install
+	sudo apt install composer
+	composer install
 
 #REDIS
 
-sudo apt install redis-server
-cd /etc/redis
+	sudo apt install redis-server
+	cd /etc/redis
 
 /*TO REDIS SAVE ON DISK*/
 
-sudo nano redis.conf
+	sudo nano redis.conf
 
 comment: 'save 900 1'
 add: 'save 1 1'
@@ -39,14 +39,14 @@ change 'appendonly' to 'yes'
 
 chage 'appendfsync' to 'always'
 
-sudo service redis-server restart
+	sudo service redis-server restart
 
-redis-cli
+	redis-cli
 	ping
 	exit
 
 /*****/
 
-cd /home/<user>/redis-mariadb
+	cd /home/<user>/redis-mariadb
 
-php index.php
+	php index.php
