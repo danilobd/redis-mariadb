@@ -1,8 +1,8 @@
 <?php 
 
 
-	$tanto 	= 1;
-	$rodada = 1;
+	$tanto 	= $argv[1];
+	$rodada = $argv[2];
 
 	echo "\nQuantidade: ".$tanto." Rodada: $rodada\n\n\n";
 
