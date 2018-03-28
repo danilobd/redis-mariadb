@@ -17,7 +17,6 @@ Script de comparação do Redis com MariaDB
 # PHP
 
 	sudo apt install php
-	sudo apt install php7.0-mysql
 
 # COMPOSER
 
