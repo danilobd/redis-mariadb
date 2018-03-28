@@ -1,0 +1,13 @@
+{
+    "name": "danbd/testecomparacao",
+    "description": "Script de comparação de Redis com MariaDB",
+    "require": {
+        "predis/predis": "^1.1"
+    },
+    "authors": [
+        {
+            "name": "danilobd",
+            "email": "dbd235@yahoo.com"
+        }
+    ]
+}
