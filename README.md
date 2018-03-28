@@ -1,10 +1,10 @@
 # redis-mariadb
 Script de comparação do Redis com MariaDB
 
-#MARIADB
+# MARIADB
 
-sudo apt install mariadb-server
-sudo mysql_secure_installation
+	sudo apt install mariadb-server
+	sudo mysql_secure_installation
 
 	CREATE USER 'php'@'localhost' IDENTIFIED BY '123456';
 	GRANT ALL PRIVILEGES ON * . * TO 'php'@'localhost';
@@ -14,16 +14,16 @@ sudo mysql_secure_installation
 	USE comparacao;
 	SOURCE comparacao.sql;
 
-#PHP
+# PHP
 
 	sudo apt install php
 
-#COMPOSER
+# COMPOSER
 
 	sudo apt install composer
 	composer install
 
-#REDIS
+# REDIS
 
 	sudo apt install redis-server
 	cd /etc/redis
