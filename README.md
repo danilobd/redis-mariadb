@@ -17,6 +17,7 @@ Script de comparação do Redis com MariaDB
 # INSTALAÇÃO PHP
 
 	sudo apt install php
+	sudo apt install php7.0-mysql
 
 A versão usada é a 7.0, a padrão do Ubuntu 16.04.
 
