@@ -203,23 +203,6 @@
 
 
 
-	function ZeraMaria(){
-
-		require_once("mysql/conecta.inc.php");
-		$pdo = conect();
-
-		$ColocaMysql=$pdo->prepare("TRUNCATE coisas; FLUSH TABLE coisas;");
-		$ColocaMysql->execute();
-
-		//SE ENCONTROU ALGUMA COISA
-		if($ColocaMysql->rowCount() != 0);
-			//echo "MariaDB limpo | ";
-		else
-			echo "\n---------->Deu ruim no mysql - Truncar tabela\n\n";
-
-	}
-	
-
 	if($totalLimpa1 <= $totalLimpa2){
 		echo "\n\nMariaDB win: ".($totalLimpa2 - $totalLimpa1)." mais rápido\n\n";
 		$resultadoLimpa = $totalLimpa2 - $totalLimpa1;
@@ -233,6 +216,23 @@
 
 
 
+	function ZeraMaria(){
+
+		require_once("mysql/conecta.inc.php");
+		$pdo = conect();
+
+		$ColocaMysql=$pdo->prepare("TRUNCATE coisas; FLUSH TABLE coisas;");
+		$ColocaMysql->execute();
+
+		//SE ENCONTROU ALGUMA COISA
+		//if($ColocaMysql->rowCount() != 0);
+			echo "MariaDB zerado";
+		/*else
+			echo "\n---------->Deu ruim no mysql - Truncar tabela\n\n";*/
+
+	}
+
+	ZeraMaria();
 
 
 
