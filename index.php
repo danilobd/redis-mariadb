@@ -1,336 +1,256 @@
 <?php 
 
 
-	$tanto 	= $argv[1];
-	$rodada = $argv[2];
+	$Quantidade = $argv[1];
+	$Rodada 	= $argv[2];
 
-	echo "\nQuantidade: ".$tanto." Rodada: $rodada\n\n\n";
 
-	echo "********INSERÇÃO:********\n";
+	require "vendor/autoload.php";
 
-	function ColocaMysql(){
+
+	echo "\nQuantidade: ".$Quantidade." Rodada: ".$Rodada."\n\n\n";
+
+
+	echo "*****Relacional:*****\n\n";
+
+	$relacional = new Src\Relacional($Quantidade, $Rodada);
+
+	$relacional->setRelacional();
+	$relacional->getRelacional();
+	$relacional->updateRelacional();
+	$relacional->delRelacional();
+	$relacional->limpaRelacional();
+
+
+	echo "\nTempo Insert: ".$relacional->getTimeInsert();
+	echo "\nTempo Select: ".$relacional->getTimeSelect();
+	echo "\nTempo Update: ".$relacional->getTimeUpdate();
+	echo "\nTempo Delete: ".$relacional->getTimeDelete();
 	
-		global $tanto;
-
-		require_once("mysql/conecta.inc.php");
-		$pdo = conect();
-
-		for($i=1;$i<=$tanto;$i++){
-
-			$ColocaMysql=$pdo->prepare("
-				INSERT INTO
-				  `coisas`
-				SET
-				  `valor` = :valor");
-			$ColocaMysql->bindvalue(":valor", $i, PDO::PARAM_INT);
-			$ColocaMysql->execute();
-
-			//SE ENCONTROU ALGUMA COISA
-			if($ColocaMysql->rowCount() != 0);
-				//echo "Foi no mysql";
-			else
-				echo "\n---------->Deu ruim no mysql - Inserção";
-
-		}
-
-	}
-	
-	function ColocaRedis(){
-
-		global $tanto;
-
-		require_once("redis/redis.class.php");
-
-		$Redis = new RedisData();
-
-		for($i=1;$i<=$tanto;$i++){
-			$result = $Redis->SET("teste:".$i, $i);
-		}
-
-	}
-
-
-	$inicioColoca1 = microtime(true);
-		ColocaMysql();
-	$totalColoca1 = microtime(true) - $inicioColoca1;
-	echo "\nMariaDB: ".$totalColoca1;
-
-
-	$inicioColoca2 = microtime(true);
-		ColocaRedis();
-	$totalColoca2 = microtime(true) - $inicioColoca2;
-	echo " | Redis: ".$totalColoca2;
-
-
-	if($totalColoca1 <= $totalColoca2){
-		echo "\n\nMariaDB win: ".($totalColoca2 - $totalColoca1)." mais rápido\n\n";
-		$resultadoColoca = $totalColoca2 - $totalColoca1;
-	}
-	else{
-		echo "\n\nRedis win: ".($totalColoca1 - $totalColoca2)." mais rápido\n\n";	
-		$resultadoColoca = $totalColoca1 - $totalColoca2;
-	}
-
-
-
-
-
-	echo "\n********ATUALIZAÇÃO:********\n";
-
-	function AtualizaMysql(){
-	
-		global $tanto;
-
-		require_once("mysql/conecta.inc.php");
-		$pdo = conect();
-
-		for($i=1;$i<=$tanto;$i++){
-
-			$ColocaMysql=$pdo->prepare("
-				UPDATE
-				  `coisas`
-				SET
-				  `valor` = :valor
-				WHERE
-				  `chave` = :chave");
-			$ColocaMysql->bindvalue(":chave", $i, PDO::PARAM_INT);
-			$ColocaMysql->bindvalue(":valor", $i+1, PDO::PARAM_INT);
-			$ColocaMysql->execute();
-
-			//SE ENCONTROU ALGUMA COISA
-			if($ColocaMysql->rowCount() != 0);
-				//echo "Foi no mysql";
-			else
-				echo "\n---------->Deu ruim no mysql - Atualização";
-
-		}
-
-	}
-	
-	function AtualizaRedis(){
-
-		global $tanto;
-
-		require_once("redis/redis.class.php");
-
-		$Redis = new RedisData();
-
-		for($i=1;$i<=$tanto;$i++){
-			$result = $Redis->SET("teste:".$i, $i+1);
-		}
-
-	}
-
-
-	$inicioAtualiza1 = microtime(true);
-		AtualizaMysql();
-	$totalAtualiza1 = microtime(true) - $inicioAtualiza1;
-	echo "\nMariaDB: ".$totalAtualiza1;
-
-
-	$inicioAtualiza2 = microtime(true);
-		AtualizaRedis();
-	$totalAtualiza2 = microtime(true) - $inicioAtualiza2;
-	echo " | Redis: ".$totalAtualiza2;
-
-
-	if($totalAtualiza1 <= $totalAtualiza2){
-		echo "\n\nMariaDB win: ".($totalAtualiza2 - $totalAtualiza1)." mais rápido\n\n";
-		$resultadoAtualiza = $totalAtualiza2 - $totalAtualiza1;
-	}
-	else{
-		echo "\n\nRedis win: ".($totalAtualiza1 - $totalAtualiza2)." mais rápido\n\n";
-		$resultadoAtualiza = $totalAtualiza1 - $totalAtualiza2;
-	}
-
-
-
-
-
-
-	echo "\n********REMOÇÃO:********\n";
-
-	function LimpaMaria(){
-
-		require_once("mysql/conecta.inc.php");
-		$pdo = conect();
-
-		global $tanto;
-
-		for($i=1;$i<=$tanto;$i++){
-
-			$ColocaMysql=$pdo->prepare("
-				DELETE FROM `coisas` WHERE chave = :chave");
-			$ColocaMysql->bindvalue(":chave", $i, PDO::PARAM_INT);
-			$ColocaMysql->execute();
-
-			//SE ENCONTROU ALGUMA COISA
-			if($ColocaMysql->rowCount() != 0);
-				//echo "MariaDB limpo | ";
-			else
-				echo "\n---------->Deu ruim no mysql - Remoção\n\n";
-
-		}
-
-	}
 
 	
-	function LimpaRedis(){	
+	echo "\n\n\n\n*****NoSQL:*****\n\n";
 
-		global $tanto;
+	$nosql 	= new Src\Nosql($Quantidade, $Rodada);
 
-		require_once("redis/redis.class.php");
+	$nosql->setNosql();
+	$nosql->getNosql();
+	$nosql->updateNosql();
+	$nosql->delNosql();
+	$nosql->limpaNosql();
 
-		$Redis = new RedisData();
+	echo "\nTempo Insert: ".$nosql->getTimeInsert();
+	echo "\nTempo Select: ".$nosql->getTimeSelect();
+	echo "\nTempo Update: ".$nosql->getTimeUpdate();
+	echo "\nTempo Delete: ".$nosql->getTimeDelete();
 
-		for($i=1;$i<=$tanto;$i++){
-			$result = $Redis->DEL("teste:".$i, $i);
-		}
 
+	echo "\n\n\n\n*****RESULTADO:*****\n\n";
+
+
+	echo "\nInsert: ";
+
+	if($relacional->getTimeInsert() > $nosql->getTimeInsert()){
+		echo "NoSql ganhou";
+		$resultadoInsert = $relacional->getTimeInsert() - $nosql->getTimeInsert();
+	}else{
+		echo "Relacional ganhou";
+		$resultadoInsert = $nosql->getTimeInsert() - $relacional->getTimeInsert();
+	}
+
+	echo "\nSelect: ";
+
+	if($relacional->getTimeSelect() > $nosql->getTimeSelect()){
+		echo "NoSql ganhou";
+		$resultadoSelect = $relacional->getTimeSelect() - $nosql->getTimeSelect();
+	}else{
+		echo "Relacional ganhou";
+		$resultadoSelect = $nosql->getTimeSelect() - $relacional->getTimeSelect();
+	}
+
+	echo "\nUpdate: ";
+
+	if($relacional->getTimeUpdate() > $nosql->getTimeUpdate()){
+		echo "NoSql ganhou";
+		$resultadoUpdate = $relacional->getTimeUpdate() - $nosql->getTimeUpdate();
+	}else{
+		echo "Relacional ganhou";
+		$resultadoUpdate = $nosql->getTimeUpdate() - $relacional->getTimeUpdate();
+	}
+
+	echo "\nDelete: ";
+
+	if($relacional->getTimeDelete() > $nosql->getTimeDelete()){
+		echo "NoSql ganhou";
+		$resultadoDelete = $relacional->getTimeDelete() - $nosql->getTimeDelete();
+	}else{
+		echo "Relacional ganhou";
+		$resultadoDelete = $nosql->getTimeDelete() - $relacional->getTimeDelete();
 	}
 
 
-	$inicioLimpa1 = microtime(true);
-		LimpaMaria();
-	$totalLimpa1 = microtime(true) - $inicioLimpa1;
-	echo "\nMariaDB: ".$totalLimpa1." | ";
-
-	
-	$inicioLimpa2 = microtime(true);
-		LimpaRedis();
-	$totalLimpa2 = microtime(true) - $inicioLimpa2;
-	echo "Redis: ".$totalLimpa2;
+	echo "\n\n\nSalvando...\n";
 
 
-
-	if($totalLimpa1 <= $totalLimpa2){
-		echo "\n\nMariaDB win: ".($totalLimpa2 - $totalLimpa1)." mais rápido\n\n";
-		$resultadoLimpa = $totalLimpa2 - $totalLimpa1;
+	try{
+		$pdo = new \PDO("mysql:host=localhost;dbname=comparacao;","php","123456");
 	}
-	else{
-		echo "\n\nRedis win: ".($totalLimpa1 - $totalLimpa2)." mais rápido\n\n";
-		$resultadoLimpa = $totalLimpa1 - $totalLimpa2;
+	catch(PDOException $e){
+		echo $e->getMessage();
 	}
 
 
-
-
-
-	function ZeraMaria(){
-
-		require_once("mysql/conecta.inc.php");
-		$pdo = conect();
-
-		$ColocaMysql=$pdo->prepare("TRUNCATE coisas; FLUSH TABLE coisas;");
-		$ColocaMysql->execute();
-
-		//SE ENCONTROU ALGUMA COISA
-		//if($ColocaMysql->rowCount() != 0);
-			echo "MariaDB zerado";
-		/*else
-			echo "\n---------->Deu ruim no mysql - Truncar tabela\n\n";*/
-
-	}
-
-	ZeraMaria();
-
-
-
-
-	
-	require_once("mysql/conecta.inc.php");
-	$pdo = conect();
-
-
-	echo "\nSalvando...\n\n";
-
-	/*INSERT*/
-	$ColocaMysql=$pdo->prepare("
+	/*INSERT*/	
+	$db=$pdo->prepare("
 		INSERT INTO
-		  	`resultado` 
-		SET
-		    `tipo` 			= :tipo,
-		    `quant_insert` 	= :quant,
-		    `rodada` 		= :rodada,
-		    `time_redis` 	= :time_maria,
-		    `time_maria` 	= :time_redis,
-		    `resultado`		= :resultado,
-		    `insert_on`		= :insert_on
-		");
-	$ColocaMysql->bindvalue(":tipo", "insert", PDO::PARAM_INT);
-	$ColocaMysql->bindvalue(":quant", $tanto, PDO::PARAM_INT);
-	$ColocaMysql->bindvalue(":rodada", $rodada, PDO::PARAM_INT);
-	$ColocaMysql->bindvalue(":time_maria", $totalColoca1, PDO::PARAM_INT);
-	$ColocaMysql->bindvalue(":time_redis", $totalColoca2, PDO::PARAM_INT);
-	$ColocaMysql->bindvalue(":resultado", $resultadoColoca, PDO::PARAM_INT);
-	$ColocaMysql->bindvalue(":insert_on", date("Y-m-d H:i:s"), PDO::PARAM_INT);
-	$ColocaMysql->execute();
+		  `resultado`(
+		    `tipo`,
+		    `quant_insert`,
+		    `rodada`,
+		    `time_redis`,
+		    `time_maria`,
+		    `resultado`,
+		    `insert_on`
+		  )
+		VALUES(
+		  ?,
+		  ?,
+		  ?,
+		  ?,
+		  ?,
+		  ?,
+		  ?
+		)");
+	$db->bindvalue(1, "insert", \PDO::PARAM_INT);
+	$db->bindvalue(2, $Quantidade, \PDO::PARAM_INT);
+	$db->bindvalue(3, $Rodada, \PDO::PARAM_INT);
+	$db->bindvalue(4, $nosql->getTimeInsert(), \PDO::PARAM_INT);
+	$db->bindvalue(5, $relacional->getTimeInsert(), \PDO::PARAM_INT);
+	$db->bindvalue(6, $resultadoInsert, \PDO::PARAM_INT);
+	$db->bindvalue(7, date("Y-m-d H:i:s"), \PDO::PARAM_INT);
+	$db->execute();
 
 	//SE ENCONTROU ALGUMA COISA
-	if($ColocaMysql->rowCount() != 0);
-		//echo "***Resultado salvo\n\n";
+	if($db->rowCount() != 0);
+		//		
 	else
-		echo "\nDeu ruim no mysql - resultado\n\n";
+		echo "\n---------->Um erro ocorreu: Salvar dados insert";
 
 
-	$AtualizaMysql=$pdo->prepare("
+	/*SELECT*/
+	$db=$pdo->prepare("
 		INSERT INTO
-		  	`resultado` 
-		SET
-		    `tipo` 			= :tipo,
-		    `quant_insert` 	= :quant,
-		    `rodada` 		= :rodada,
-		    `time_redis` 	= :time_maria,
-		    `time_maria` 	= :time_redis,
-		    `resultado`		= :resultado,
-		    `insert_on`		= :insert_on
-		");
-	$AtualizaMysql->bindvalue(":tipo", "update", PDO::PARAM_INT);
-	$AtualizaMysql->bindvalue(":quant", $tanto, PDO::PARAM_INT);
-	$AtualizaMysql->bindvalue(":rodada", $rodada, PDO::PARAM_INT);
-	$AtualizaMysql->bindvalue(":time_maria", $totalAtualiza1, PDO::PARAM_INT);
-	$AtualizaMysql->bindvalue(":time_redis", $totalAtualiza2, PDO::PARAM_INT);
-	$AtualizaMysql->bindvalue(":resultado", $resultadoAtualiza, PDO::PARAM_INT);
-	$AtualizaMysql->bindvalue(":insert_on", date("Y-m-d H:i:s"), PDO::PARAM_INT);
-	$AtualizaMysql->execute();
+		  `resultado`(
+		    `tipo`,
+		    `quant_insert`,
+		    `rodada`,
+		    `time_redis`,
+		    `time_maria`,
+		    `resultado`,
+		    `insert_on`
+		  )
+		VALUES(
+		  ?,
+		  ?,
+		  ?,
+		  ?,
+		  ?,
+		  ?,
+		  ?
+		)");
+	$db->bindvalue(1, "select", \PDO::PARAM_INT);
+	$db->bindvalue(2, $Quantidade, \PDO::PARAM_INT);
+	$db->bindvalue(3, $Rodada, \PDO::PARAM_INT);
+	$db->bindvalue(4, $nosql->getTimeSelect(), \PDO::PARAM_INT);
+	$db->bindvalue(5, $relacional->getTimeSelect(), \PDO::PARAM_INT);
+	$db->bindvalue(6, $resultadoSelect, \PDO::PARAM_INT);
+	$db->bindvalue(7, date("Y-m-d H:i:s"), \PDO::PARAM_INT);
+	$db->execute();
 
 	//SE ENCONTROU ALGUMA COISA
-	if($AtualizaMysql->rowCount() != 0);
-		//echo "***Resultado salvo\n\n";
+	if($db->rowCount() != 0);
+		//		
 	else
-		echo "\nDeu ruim no mysql - resultado\n\n";
+		echo "\n---------->Um erro ocorreu: Salvar dados select";
 
-	$RemoveMysql=$pdo->prepare("
+
+	/*UPDATE*/
+	$db=$pdo->prepare("
 		INSERT INTO
-		  	`resultado` 
-		SET
-		    `tipo` 			= :tipo,
-		    `quant_insert` 	= :quant,
-		    `rodada` 		= :rodada,
-		    `time_redis` 	= :time_maria,
-		    `time_maria` 	= :time_redis,
-		    `resultado`		= :resultado,
-		    `insert_on`		= :insert_on
-		");
-	$RemoveMysql->bindvalue(":tipo", "delete", PDO::PARAM_INT);
-	$RemoveMysql->bindvalue(":quant", $tanto, PDO::PARAM_INT);
-	$RemoveMysql->bindvalue(":rodada", $rodada, PDO::PARAM_INT);
-	$RemoveMysql->bindvalue(":time_maria", $totalLimpa1, PDO::PARAM_INT);
-	$RemoveMysql->bindvalue(":time_redis", $totalLimpa2, PDO::PARAM_INT);
-	$RemoveMysql->bindvalue(":resultado", $resultadoLimpa, PDO::PARAM_INT);
-	$RemoveMysql->bindvalue(":insert_on", date("Y-m-d H:i:s"), PDO::PARAM_INT);
-	$RemoveMysql->execute();
+		  `resultado`(
+		    `tipo`,
+		    `quant_insert`,
+		    `rodada`,
+		    `time_redis`,
+		    `time_maria`,
+		    `resultado`,
+		    `insert_on`
+		  )
+		VALUES(
+		  ?,
+		  ?,
+		  ?,
+		  ?,
+		  ?,
+		  ?,
+		  ?
+		)");
+	$db->bindvalue(1, "update", \PDO::PARAM_INT);
+	$db->bindvalue(2, $Quantidade, \PDO::PARAM_INT);
+	$db->bindvalue(3, $Rodada, \PDO::PARAM_INT);
+	$db->bindvalue(4, $nosql->getTimeUpdate(), \PDO::PARAM_INT);
+	$db->bindvalue(5, $relacional->getTimeUpdate(), \PDO::PARAM_INT);
+	$db->bindvalue(6, $resultadoUpdate, \PDO::PARAM_INT);
+	$db->bindvalue(7, date("Y-m-d H:i:s"), \PDO::PARAM_INT);
+	$db->execute();
 
 	//SE ENCONTROU ALGUMA COISA
-	if($RemoveMysql->rowCount() != 0);
-		//echo "***Resultado salvo\n\n";
+	if($db->rowCount() != 0);
+		//		
 	else
-		echo "\nDeu ruim no mysql - resultado\n\n";
+		echo "\n---------->Um erro ocorreu: Salvar dados update";
+
+
+	/*DELETE*/
+	$db=$pdo->prepare("
+		INSERT INTO
+		  `resultado`(
+		    `tipo`,
+		    `quant_insert`,
+		    `rodada`,
+		    `time_redis`,
+		    `time_maria`,
+		    `resultado`,
+		    `insert_on`
+		  )
+		VALUES(
+		  ?,
+		  ?,
+		  ?,
+		  ?,
+		  ?,
+		  ?,
+		  ?
+		)");
+	$db->bindvalue(1, "delete", \PDO::PARAM_INT);
+	$db->bindvalue(2, $Quantidade, \PDO::PARAM_INT);
+	$db->bindvalue(3, $Rodada, \PDO::PARAM_INT);
+	$db->bindvalue(4, $nosql->getTimeDelete(), \PDO::PARAM_INT);
+	$db->bindvalue(5, $relacional->getTimeDelete(), \PDO::PARAM_INT);
+	$db->bindvalue(6, $resultadoUpdate, \PDO::PARAM_INT);
+	$db->bindvalue(7, date("Y-m-d H:i:s"), \PDO::PARAM_INT);
+	$db->execute();
+
+	//SE ENCONTROU ALGUMA COISA
+	if($db->rowCount() != 0);
+		//		
+	else
+		echo "\n---------->Um erro ocorreu: Salvar dados delete";
+
+	echo "Salvo.\n\n";
+
 
 	/*
-
-	TRUNCATE TABLE coisas; FLUSH TABLE coisas;
-
 
 	SELECT
 	  `tipo`,
@@ -358,6 +278,5 @@
 	GROUP BY
 	  `tipo`,
 	  `quant_insert`
-
 
 	*/
