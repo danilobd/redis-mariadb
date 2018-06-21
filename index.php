@@ -3,7 +3,8 @@
 
 	$Quantidade = $argv[1];
 	$Rodada 	= $argv[2];
-
+	$METODO 	= $argv[3];
+	$DISK 		= $argv[4];
 
 	require "vendor/autoload.php";
 
@@ -109,10 +110,14 @@
 		    `rodada`,
 		    `time_redis`,
 		    `time_maria`,
+		    `metodo`,
+		    `disk`,
 		    `resultado`,
 		    `insert_on`
 		  )
 		VALUES(
+		  ?,
+		  ?,
 		  ?,
 		  ?,
 		  ?,
@@ -126,8 +131,10 @@
 	$db->bindvalue(3, $Rodada, \PDO::PARAM_INT);
 	$db->bindvalue(4, $nosql->getTimeInsert(), \PDO::PARAM_INT);
 	$db->bindvalue(5, $relacional->getTimeInsert(), \PDO::PARAM_INT);
-	$db->bindvalue(6, $resultadoInsert, \PDO::PARAM_INT);
-	$db->bindvalue(7, date("Y-m-d H:i:s"), \PDO::PARAM_INT);
+	$db->bindvalue(6, $METODO, \PDO::PARAM_INT);
+	$db->bindvalue(7, $DISK, \PDO::PARAM_INT);
+	$db->bindvalue(8, $resultadoInsert, \PDO::PARAM_INT);
+	$db->bindvalue(9, date("Y-m-d H:i:s"), \PDO::PARAM_INT);
 	$db->execute();
 
 	//SE ENCONTROU ALGUMA COISA
@@ -146,10 +153,14 @@
 		    `rodada`,
 		    `time_redis`,
 		    `time_maria`,
+		    `metodo`,
+		    `disk`,
 		    `resultado`,
 		    `insert_on`
 		  )
 		VALUES(
+		  ?,
+		  ?,
 		  ?,
 		  ?,
 		  ?,
@@ -161,10 +172,12 @@
 	$db->bindvalue(1, "select", \PDO::PARAM_INT);
 	$db->bindvalue(2, $Quantidade, \PDO::PARAM_INT);
 	$db->bindvalue(3, $Rodada, \PDO::PARAM_INT);
-	$db->bindvalue(4, $nosql->getTimeSelect(), \PDO::PARAM_INT);
-	$db->bindvalue(5, $relacional->getTimeSelect(), \PDO::PARAM_INT);
-	$db->bindvalue(6, $resultadoSelect, \PDO::PARAM_INT);
-	$db->bindvalue(7, date("Y-m-d H:i:s"), \PDO::PARAM_INT);
+	$db->bindvalue(4, $nosql->getTimeInsert(), \PDO::PARAM_INT);
+	$db->bindvalue(5, $relacional->getTimeInsert(), \PDO::PARAM_INT);
+	$db->bindvalue(6, $METODO, \PDO::PARAM_INT);
+	$db->bindvalue(7, $DISK, \PDO::PARAM_INT);
+	$db->bindvalue(8, $resultadoInsert, \PDO::PARAM_INT);
+	$db->bindvalue(9, date("Y-m-d H:i:s"), \PDO::PARAM_INT);
 	$db->execute();
 
 	//SE ENCONTROU ALGUMA COISA
@@ -183,10 +196,14 @@
 		    `rodada`,
 		    `time_redis`,
 		    `time_maria`,
+		    `metodo`,
+		    `disk`,
 		    `resultado`,
 		    `insert_on`
 		  )
 		VALUES(
+		  ?,
+		  ?,
 		  ?,
 		  ?,
 		  ?,
@@ -198,10 +215,12 @@
 	$db->bindvalue(1, "update", \PDO::PARAM_INT);
 	$db->bindvalue(2, $Quantidade, \PDO::PARAM_INT);
 	$db->bindvalue(3, $Rodada, \PDO::PARAM_INT);
-	$db->bindvalue(4, $nosql->getTimeUpdate(), \PDO::PARAM_INT);
-	$db->bindvalue(5, $relacional->getTimeUpdate(), \PDO::PARAM_INT);
-	$db->bindvalue(6, $resultadoUpdate, \PDO::PARAM_INT);
-	$db->bindvalue(7, date("Y-m-d H:i:s"), \PDO::PARAM_INT);
+	$db->bindvalue(4, $nosql->getTimeInsert(), \PDO::PARAM_INT);
+	$db->bindvalue(5, $relacional->getTimeInsert(), \PDO::PARAM_INT);
+	$db->bindvalue(6, $METODO, \PDO::PARAM_INT);
+	$db->bindvalue(7, $DISK, \PDO::PARAM_INT);
+	$db->bindvalue(8, $resultadoInsert, \PDO::PARAM_INT);
+	$db->bindvalue(9, date("Y-m-d H:i:s"), \PDO::PARAM_INT);
 	$db->execute();
 
 	//SE ENCONTROU ALGUMA COISA
@@ -220,10 +239,14 @@
 		    `rodada`,
 		    `time_redis`,
 		    `time_maria`,
+		    `metodo`,
+		    `disk`,
 		    `resultado`,
 		    `insert_on`
 		  )
 		VALUES(
+		  ?,
+		  ?,
 		  ?,
 		  ?,
 		  ?,
@@ -235,10 +258,12 @@
 	$db->bindvalue(1, "delete", \PDO::PARAM_INT);
 	$db->bindvalue(2, $Quantidade, \PDO::PARAM_INT);
 	$db->bindvalue(3, $Rodada, \PDO::PARAM_INT);
-	$db->bindvalue(4, $nosql->getTimeDelete(), \PDO::PARAM_INT);
-	$db->bindvalue(5, $relacional->getTimeDelete(), \PDO::PARAM_INT);
-	$db->bindvalue(6, $resultadoUpdate, \PDO::PARAM_INT);
-	$db->bindvalue(7, date("Y-m-d H:i:s"), \PDO::PARAM_INT);
+	$db->bindvalue(4, $nosql->getTimeInsert(), \PDO::PARAM_INT);
+	$db->bindvalue(5, $relacional->getTimeInsert(), \PDO::PARAM_INT);
+	$db->bindvalue(6, $METODO, \PDO::PARAM_INT);
+	$db->bindvalue(7, $DISK, \PDO::PARAM_INT);
+	$db->bindvalue(8, $resultadoInsert, \PDO::PARAM_INT);
+	$db->bindvalue(9, date("Y-m-d H:i:s"), \PDO::PARAM_INT);
 	$db->execute();
 
 	//SE ENCONTROU ALGUMA COISA

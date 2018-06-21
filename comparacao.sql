@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Tempo de geração: 28/03/2018 às 10:38
+-- Tempo de geração: 21/06/2018 às 10:55
 -- Versão do servidor: 10.0.34-MariaDB-0ubuntu0.16.04.1
--- Versão do PHP: 7.0.28-0ubuntu0.16.04.1
+-- Versão do PHP: 7.0.30-0ubuntu0.16.04.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -44,6 +44,8 @@ CREATE TABLE `resultado` (
   `rodada` int(11) NOT NULL,
   `time_redis` double NOT NULL,
   `time_maria` double NOT NULL,
+  `metodo` varchar(20) NOT NULL,
+  `disk` varchar(20) NOT NULL,
   `resultado` double NOT NULL,
   `insert_on` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

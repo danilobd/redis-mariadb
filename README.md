@@ -1,10 +1,16 @@
-# redis-mariadb
-Script de comparação do Redis com MariaDB
+# GIT CLONE
 
-# INSTALAÇÃO MARIADB
+	https://github.com/danilobd/redis-mariadb.git
+
+	cd redis-mariadb
+
+# MARIADB
 
 	sudo apt install mariadb-server
+
 	sudo mysql_secure_installation
+
+## CRIANDO USUARIO
 
 	CREATE USER 'php'@'localhost' IDENTIFIED BY '123456';
 	GRANT ALL PRIVILEGES ON * . * TO 'php'@'localhost';
@@ -14,98 +20,66 @@ Script de comparação do Redis com MariaDB
 	USE comparacao;
 	SOURCE comparacao.sql;
 
-# INSTALAÇÃO PHP
+# PHP
 
 	sudo apt install php
 	sudo apt install php7.0-mysql
 
-A versão usada é a 7.0, a padrão do Ubuntu 16.04.
 
-# INSTALAÇÃO COMPOSER
+## COMPOSER
 
 	sudo apt install composer
-	
-Instalação do Predis:
+	composer install --no-dev
 
-	composer install
-
-# INSTALAÇÃO REDIS
+# REDIS
 
 	sudo apt install redis-server
-
-CONFIGURAÇÃO PARA O REDIS SALVAR TODAS AS ALTERAÇÕES NO DISCO:
-
 	cd /etc/redis
+
+## TO REDIS SAVE ON DISK
+
 	sudo nano redis.conf
 
-Alterar as linhas:
+	comment: 'save 900 1'
+	add: 'save 1 1'
 
-	comentar: 'save 900 1'
-	adicionar: 'save 1 1'
+	change 'appendonly' to 'yes'
 
-	mudar 'appendonly' para 'yes'
-
-	mudar 'appendfsync' to 'always'
-
-Reiniciar o Redis:
+	change 'appendfsync' to 'always'
+	change 'appendfsync' to 'no'
+	change 'appendfsync' to 'everysec'
 
 	sudo service redis-server restart
 
-Testar o Redis:
-
 	redis-cli
+	ping
+	exit
 
-		ping
-	
-
-# EXECUTAR
 
 	cd /home/<user>/redis-mariadb
 
-Passar os parametros por argv para o script:
 
-	php index.php [quantidade de linhas] [numero da rodada]
+# TESTES
 
-Exemplo:
-	
-	php index.php 15000 1
+## On HD
 
-Sera escritas 15.000 linhas, atualizara as 15.000 linhas e removera as todas elas. Primeiramente do MariaDB e depois do Redis, na primeira rodada.
+### everysec (A)
+	bash rodatudo.sh a hd
 
-Repetindo isso pelo menos três vezes
+### always (B)
+	bash rodatudo.sh b hd
 
-	php index.php 15000 2
-	php index.php 15000 3
-	
-E será armazenado os resultados ao final do tempo que levou para executar as operações em cada banco.
+### no (C)
+	bash rodatudo.sh c hd
 
-Para visualizar, sera feito a media com os dados obtidos para cada quantidade:
 
-	SELECT
-	  `tipo`,
-	  `quant_insert`,
-	  AVG(`time_redis`) AS redis,
-	  AVG(`time_maria`) AS mariadb
-	FROM
-	  `resultado`
-	WHERE
-	  tipo = "[update] [select] [delete]"
-	GROUP BY
-	  `tipo`,
-	  `quant_insert`
-	  
-Ou visualizando mais expecifico:
-	
-	SELECT
-	  `tipo`,
-	  `quant_insert`,
-	  AVG(`time_redis`) AS redis,
-	  AVG(`time_maria`) AS mariadb
-	FROM
-	  `resultado`
-	WHERE
-	  tipo = "[update] [select] [delete]" AND `quant_insert` = "[Quantidade de linhas]"
-	GROUP BY
-	  `tipo`,
-	  `quant_insert`
-	  
+## On SSD
+
+### everysec (A)
+	bash rodatudo.sh a ssd
+
+### always (B)
+	bash rodatudo.sh b ssd
+
+### no (C)
+	bash rodatudo.sh c ssd
