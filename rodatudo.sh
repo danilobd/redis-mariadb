@@ -81,15 +81,15 @@
 
 ## TESTE 10.000
 
-	php index.php 1000 1 $1 $2
+	php index.php 10000 1 $1 $2
 	echo
-	php index.php 1000 2 $1 $2
+	php index.php 10000 2 $1 $2
 	echo
-	php index.php 1000 3 $1 $2
+	php index.php 10000 3 $1 $2
 	echo
-	php index.php 1000 4 $1 $2
+	php index.php 10000 4 $1 $2
 	echo
-	php index.php 1000 5 $1 $2
+	php index.php 10000 5 $1 $2
 	echo
 
 ## TESTE 15.000
