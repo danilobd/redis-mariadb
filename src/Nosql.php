@@ -99,19 +99,19 @@
 
 		function limpaNosql(){
 
-			echo "Limpando...\n";
+			echo "\nLimpando...\n";
 
 			$predis = new \Predis\Client();
 
-			$time = microtime(true);
+			//$time = microtime(true);
 
-			for($i=1;$i<=$this->Quant;$i++){
+			//for($i=1;$i<=$this->Quant;$i++){
 
 				$predis->FLUSHALL();
 
-			}
+			//}
 
-			$this->timeDelete = microtime(true) - $time;
+			//$this->timeDelete = microtime(true) - $time;
 
 		}
 

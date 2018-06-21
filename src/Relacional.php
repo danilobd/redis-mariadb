@@ -179,7 +179,7 @@
 
 		function limpaRelacional(){
 
-			echo "Limpando...";
+			echo "\nLimpando...\n";
 
 			try{
 				$pdo = new \PDO("mysql:host=localhost;dbname=comparacao;","php","123456");
@@ -188,7 +188,7 @@
 				echo $e->getMessage();
 			}
 			
-			for($i=1;$i<=$this->Quant;$i++){
+			//for($i=1;$i<=$this->Quant;$i++){
 
 				$db=$pdo->prepare("TRUNCATE coisas");
 				$db->execute();
@@ -199,9 +199,7 @@
 				//else;
 					//echo "\n---------->Deu ruim no mysql - LIMPA";
 
-			}
-
-			echo "\n";
+			//}
 
 		}
 
