@@ -172,11 +172,11 @@
 	$db->bindvalue(1, "select", \PDO::PARAM_INT);
 	$db->bindvalue(2, $Quantidade, \PDO::PARAM_INT);
 	$db->bindvalue(3, $Rodada, \PDO::PARAM_INT);
-	$db->bindvalue(4, $nosql->getTimeInsert(), \PDO::PARAM_INT);
-	$db->bindvalue(5, $relacional->getTimeInsert(), \PDO::PARAM_INT);
+	$db->bindvalue(4, $nosql->getTimeSelect(), \PDO::PARAM_INT);
+	$db->bindvalue(5, $relacional->getTimeSelect(), \PDO::PARAM_INT);
 	$db->bindvalue(6, $METODO, \PDO::PARAM_INT);
 	$db->bindvalue(7, $DISK, \PDO::PARAM_INT);
-	$db->bindvalue(8, $resultadoInsert, \PDO::PARAM_INT);
+	$db->bindvalue(8, $resultadoSelect, \PDO::PARAM_INT);
 	$db->bindvalue(9, date("Y-m-d H:i:s"), \PDO::PARAM_INT);
 	$db->execute();
 
@@ -215,11 +215,11 @@
 	$db->bindvalue(1, "update", \PDO::PARAM_INT);
 	$db->bindvalue(2, $Quantidade, \PDO::PARAM_INT);
 	$db->bindvalue(3, $Rodada, \PDO::PARAM_INT);
-	$db->bindvalue(4, $nosql->getTimeInsert(), \PDO::PARAM_INT);
-	$db->bindvalue(5, $relacional->getTimeInsert(), \PDO::PARAM_INT);
+	$db->bindvalue(4, $nosql->getTimeUpdate(), \PDO::PARAM_INT);
+	$db->bindvalue(5, $relacional->getTimeUpdate(), \PDO::PARAM_INT);
 	$db->bindvalue(6, $METODO, \PDO::PARAM_INT);
 	$db->bindvalue(7, $DISK, \PDO::PARAM_INT);
-	$db->bindvalue(8, $resultadoInsert, \PDO::PARAM_INT);
+	$db->bindvalue(8, $resultadoUpdate, \PDO::PARAM_INT);
 	$db->bindvalue(9, date("Y-m-d H:i:s"), \PDO::PARAM_INT);
 	$db->execute();
 
@@ -258,11 +258,11 @@
 	$db->bindvalue(1, "delete", \PDO::PARAM_INT);
 	$db->bindvalue(2, $Quantidade, \PDO::PARAM_INT);
 	$db->bindvalue(3, $Rodada, \PDO::PARAM_INT);
-	$db->bindvalue(4, $nosql->getTimeInsert(), \PDO::PARAM_INT);
-	$db->bindvalue(5, $relacional->getTimeInsert(), \PDO::PARAM_INT);
+	$db->bindvalue(4, $nosql->getTimeDelete(), \PDO::PARAM_INT);
+	$db->bindvalue(5, $relacional->getTimeDelete(), \PDO::PARAM_INT);
 	$db->bindvalue(6, $METODO, \PDO::PARAM_INT);
 	$db->bindvalue(7, $DISK, \PDO::PARAM_INT);
-	$db->bindvalue(8, $resultadoInsert, \PDO::PARAM_INT);
+	$db->bindvalue(8, $resultadoDelete, \PDO::PARAM_INT);
 	$db->bindvalue(9, date("Y-m-d H:i:s"), \PDO::PARAM_INT);
 	$db->execute();
 
