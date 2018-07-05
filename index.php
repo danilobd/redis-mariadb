@@ -5,88 +5,65 @@
 	$Rodada 	= $argv[2];
 	$METODO 	= $argv[3];
 	$DISK 		= $argv[4];
+	$BANCO		= strtolower($argv[5]);
 
 	require "vendor/autoload.php";
 
+	echo "\n----------------------\n";
+	echo "\nQuantidade: ".$Quantidade." Rodada: ".$Rodada;
+	echo "\nBanco: ".$BANCO." | Disco: ".$DISK." | Metodo: ".$METODO;
 
-	echo "\nQuantidade: ".$Quantidade." Rodada: ".$Rodada."\n\n\n";
+	if($BANCO == "mariadb"){
 
+		echo "\n\n*****Relacional:*****\n\n";
 
-	echo "*****Relacional:*****\n\n";
+		$relacional = new Src\Relacional($Quantidade, $Rodada);
 
-	$relacional = new Src\Relacional($Quantidade, $Rodada);
+		$relacional->setRelacional();
+		$relacional->getRelacional();
+		$relacional->updateRelacional();
+		$relacional->delRelacional();
+		$relacional->limpaRelacional();
 
-	$relacional->setRelacional();
-	$relacional->getRelacional();
-	$relacional->updateRelacional();
-	$relacional->delRelacional();
-	$relacional->limpaRelacional();
+		echo "\n\n*****RESULTADO:*****\n";
 
+		echo "\nTempo Insert: ".$relacional->getTimeInsert();
+		echo "\nTempo Select: ".$relacional->getTimeSelect();
+		echo "\nTempo Update: ".$relacional->getTimeUpdate();
+		echo "\nTempo Delete: ".$relacional->getTimeDelete();
 
-	echo "\nTempo Insert: ".$relacional->getTimeInsert();
-	echo "\nTempo Select: ".$relacional->getTimeSelect();
-	echo "\nTempo Update: ".$relacional->getTimeUpdate();
-	echo "\nTempo Delete: ".$relacional->getTimeDelete();
-	
+		$TimeInsert = $relacional->getTimeInsert();
+		$TimeSelect = $relacional->getTimeSelect();
+		$TimeUpdate = $relacional->getTimeUpdate();
+		$TimeDelete = $relacional->getTimeDelete();
 
-	
-	echo "\n\n\n\n*****NoSQL:*****\n\n";
+	}else if($BANCO == "redis"){
 
-	$nosql 	= new Src\Nosql($Quantidade, $Rodada);
+		echo "\n\n*****NoSQL:*****\n\n";
 
-	$nosql->setNosql();
-	$nosql->getNosql();
-	$nosql->updateNosql();
-	$nosql->delNosql();
-	$nosql->limpaNosql();
+		$nosql 	= new Src\Nosql($Quantidade, $Rodada);
 
-	echo "\nTempo Insert: ".$nosql->getTimeInsert();
-	echo "\nTempo Select: ".$nosql->getTimeSelect();
-	echo "\nTempo Update: ".$nosql->getTimeUpdate();
-	echo "\nTempo Delete: ".$nosql->getTimeDelete();
+		$nosql->setNosql();
+		$nosql->getNosql();
+		$nosql->updateNosql();
+		$nosql->delNosql();
+		$nosql->limpaNosql();
 
+		echo "\n\n*****RESULTADO:*****\n\n";
 
-	echo "\n\n\n\n*****RESULTADO:*****\n\n";
+		echo "\nTempo Insert: ".$nosql->getTimeInsert();
+		echo "\nTempo Select: ".$nosql->getTimeSelect();
+		echo "\nTempo Update: ".$nosql->getTimeUpdate();
+		echo "\nTempo Delete: ".$nosql->getTimeDelete();
 
+		$TimeInsert = $nosql->getTimeInsert();
+		$TimeSelect = $nosql->getTimeSelect();
+		$TimeUpdate = $nosql->getTimeUpdate();
+		$TimeDelete = $nosql->getTimeDelete();
 
-	echo "\nInsert: ";
-
-	if($relacional->getTimeInsert() > $nosql->getTimeInsert()){
-		echo "NoSql ganhou";
-		$resultadoInsert = $relacional->getTimeInsert() - $nosql->getTimeInsert();
 	}else{
-		echo "Relacional ganhou";
-		$resultadoInsert = $nosql->getTimeInsert() - $relacional->getTimeInsert();
-	}
-
-	echo "\nSelect: ";
-
-	if($relacional->getTimeSelect() > $nosql->getTimeSelect()){
-		echo "NoSql ganhou";
-		$resultadoSelect = $relacional->getTimeSelect() - $nosql->getTimeSelect();
-	}else{
-		echo "Relacional ganhou";
-		$resultadoSelect = $nosql->getTimeSelect() - $relacional->getTimeSelect();
-	}
-
-	echo "\nUpdate: ";
-
-	if($relacional->getTimeUpdate() > $nosql->getTimeUpdate()){
-		echo "NoSql ganhou";
-		$resultadoUpdate = $relacional->getTimeUpdate() - $nosql->getTimeUpdate();
-	}else{
-		echo "Relacional ganhou";
-		$resultadoUpdate = $nosql->getTimeUpdate() - $relacional->getTimeUpdate();
-	}
-
-	echo "\nDelete: ";
-
-	if($relacional->getTimeDelete() > $nosql->getTimeDelete()){
-		echo "NoSql ganhou";
-		$resultadoDelete = $relacional->getTimeDelete() - $nosql->getTimeDelete();
-	}else{
-		echo "Relacional ganhou";
-		$resultadoDelete = $nosql->getTimeDelete() - $relacional->getTimeDelete();
+		echo "Banco ".$BANCO." não identificado...";
+		exit;
 	}
 
 
@@ -105,14 +82,13 @@
 	$db=$pdo->prepare("
 		INSERT INTO
 		  `resultado`(
+		    `banco`,
 		    `tipo`,
 		    `quant_insert`,
 		    `rodada`,
-		    `time_redis`,
-		    `time_maria`,
+		    `time`,
 		    `metodo`,
 		    `disk`,
-		    `resultado`,
 		    `insert_on`
 		  )
 		VALUES(
@@ -123,18 +99,16 @@
 		  ?,
 		  ?,
 		  ?,
-		  ?,
 		  ?
 		)");
-	$db->bindvalue(1, "insert", \PDO::PARAM_INT);
-	$db->bindvalue(2, $Quantidade, \PDO::PARAM_INT);
-	$db->bindvalue(3, $Rodada, \PDO::PARAM_INT);
-	$db->bindvalue(4, $nosql->getTimeInsert(), \PDO::PARAM_INT);
-	$db->bindvalue(5, $relacional->getTimeInsert(), \PDO::PARAM_INT);
+	$db->bindvalue(1, $BANCO, \PDO::PARAM_INT);
+	$db->bindvalue(2, "insert", \PDO::PARAM_INT);
+	$db->bindvalue(3, $Quantidade, \PDO::PARAM_INT);
+	$db->bindvalue(4, $Rodada, \PDO::PARAM_INT);
+	$db->bindvalue(5, $TimeInsert, \PDO::PARAM_INT);
 	$db->bindvalue(6, $METODO, \PDO::PARAM_INT);
 	$db->bindvalue(7, $DISK, \PDO::PARAM_INT);
-	$db->bindvalue(8, $resultadoInsert, \PDO::PARAM_INT);
-	$db->bindvalue(9, date("Y-m-d H:i:s"), \PDO::PARAM_INT);
+	$db->bindvalue(8, date("Y-m-d H:i:s"), \PDO::PARAM_INT);
 	$db->execute();
 
 	//SE ENCONTROU ALGUMA COISA
@@ -148,14 +122,13 @@
 	$db=$pdo->prepare("
 		INSERT INTO
 		  `resultado`(
+		    `banco`,
 		    `tipo`,
 		    `quant_insert`,
 		    `rodada`,
-		    `time_redis`,
-		    `time_maria`,
+		    `time`,
 		    `metodo`,
 		    `disk`,
-		    `resultado`,
 		    `insert_on`
 		  )
 		VALUES(
@@ -166,18 +139,16 @@
 		  ?,
 		  ?,
 		  ?,
-		  ?,
 		  ?
 		)");
-	$db->bindvalue(1, "select", \PDO::PARAM_INT);
-	$db->bindvalue(2, $Quantidade, \PDO::PARAM_INT);
-	$db->bindvalue(3, $Rodada, \PDO::PARAM_INT);
-	$db->bindvalue(4, $nosql->getTimeSelect(), \PDO::PARAM_INT);
-	$db->bindvalue(5, $relacional->getTimeSelect(), \PDO::PARAM_INT);
+	$db->bindvalue(1, $BANCO, \PDO::PARAM_INT);
+	$db->bindvalue(2, "select", \PDO::PARAM_INT);
+	$db->bindvalue(3, $Quantidade, \PDO::PARAM_INT);
+	$db->bindvalue(4, $Rodada, \PDO::PARAM_INT);
+	$db->bindvalue(5, $TimeSelect, \PDO::PARAM_INT);
 	$db->bindvalue(6, $METODO, \PDO::PARAM_INT);
 	$db->bindvalue(7, $DISK, \PDO::PARAM_INT);
-	$db->bindvalue(8, $resultadoSelect, \PDO::PARAM_INT);
-	$db->bindvalue(9, date("Y-m-d H:i:s"), \PDO::PARAM_INT);
+	$db->bindvalue(8, date("Y-m-d H:i:s"), \PDO::PARAM_INT);
 	$db->execute();
 
 	//SE ENCONTROU ALGUMA COISA
@@ -191,14 +162,13 @@
 	$db=$pdo->prepare("
 		INSERT INTO
 		  `resultado`(
+		    `banco`,
 		    `tipo`,
 		    `quant_insert`,
 		    `rodada`,
-		    `time_redis`,
-		    `time_maria`,
+		    `time`,
 		    `metodo`,
 		    `disk`,
-		    `resultado`,
 		    `insert_on`
 		  )
 		VALUES(
@@ -209,18 +179,16 @@
 		  ?,
 		  ?,
 		  ?,
-		  ?,
 		  ?
 		)");
-	$db->bindvalue(1, "update", \PDO::PARAM_INT);
-	$db->bindvalue(2, $Quantidade, \PDO::PARAM_INT);
-	$db->bindvalue(3, $Rodada, \PDO::PARAM_INT);
-	$db->bindvalue(4, $nosql->getTimeUpdate(), \PDO::PARAM_INT);
-	$db->bindvalue(5, $relacional->getTimeUpdate(), \PDO::PARAM_INT);
+	$db->bindvalue(1, $BANCO, \PDO::PARAM_INT);
+	$db->bindvalue(2, "update", \PDO::PARAM_INT);
+	$db->bindvalue(3, $Quantidade, \PDO::PARAM_INT);
+	$db->bindvalue(4, $Rodada, \PDO::PARAM_INT);
+	$db->bindvalue(5, $TimeUpdate, \PDO::PARAM_INT);
 	$db->bindvalue(6, $METODO, \PDO::PARAM_INT);
 	$db->bindvalue(7, $DISK, \PDO::PARAM_INT);
-	$db->bindvalue(8, $resultadoUpdate, \PDO::PARAM_INT);
-	$db->bindvalue(9, date("Y-m-d H:i:s"), \PDO::PARAM_INT);
+	$db->bindvalue(8, date("Y-m-d H:i:s"), \PDO::PARAM_INT);
 	$db->execute();
 
 	//SE ENCONTROU ALGUMA COISA
@@ -230,18 +198,17 @@
 		echo "\n---------->Um erro ocorreu: Salvar dados update";
 
 
-	/*DELETE*/
+	/*DELETE*/	
 	$db=$pdo->prepare("
 		INSERT INTO
 		  `resultado`(
+		    `banco`,
 		    `tipo`,
 		    `quant_insert`,
 		    `rodada`,
-		    `time_redis`,
-		    `time_maria`,
+		    `time`,
 		    `metodo`,
 		    `disk`,
-		    `resultado`,
 		    `insert_on`
 		  )
 		VALUES(
@@ -252,18 +219,16 @@
 		  ?,
 		  ?,
 		  ?,
-		  ?,
 		  ?
 		)");
-	$db->bindvalue(1, "delete", \PDO::PARAM_INT);
-	$db->bindvalue(2, $Quantidade, \PDO::PARAM_INT);
-	$db->bindvalue(3, $Rodada, \PDO::PARAM_INT);
-	$db->bindvalue(4, $nosql->getTimeDelete(), \PDO::PARAM_INT);
-	$db->bindvalue(5, $relacional->getTimeDelete(), \PDO::PARAM_INT);
+	$db->bindvalue(1, $BANCO, \PDO::PARAM_INT);
+	$db->bindvalue(2, "delete", \PDO::PARAM_INT);
+	$db->bindvalue(3, $Quantidade, \PDO::PARAM_INT);
+	$db->bindvalue(4, $Rodada, \PDO::PARAM_INT);
+	$db->bindvalue(5, $TimeDelete, \PDO::PARAM_INT);
 	$db->bindvalue(6, $METODO, \PDO::PARAM_INT);
 	$db->bindvalue(7, $DISK, \PDO::PARAM_INT);
-	$db->bindvalue(8, $resultadoDelete, \PDO::PARAM_INT);
-	$db->bindvalue(9, date("Y-m-d H:i:s"), \PDO::PARAM_INT);
+	$db->bindvalue(8, date("Y-m-d H:i:s"), \PDO::PARAM_INT);
 	$db->execute();
 
 	//SE ENCONTROU ALGUMA COISA

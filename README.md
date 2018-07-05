@@ -66,25 +66,25 @@
 ### On HD
 
 #### everysec (A)
-	bash rodatudo.sh a hd
+	bash rodatudo.sh a hd MariaDB|Redis
 
 #### always (B)
-	bash rodatudo.sh b hd
+	bash rodatudo.sh b hd MariaDB|Redis
 
 #### no (C)
-	bash rodatudo.sh c hd
+	bash rodatudo.sh c hd MariaDB|Redis
 
 
 ### On SSD
 
 #### everysec (A)
-	bash rodatudo.sh a ssd
+	bash rodatudo.sh a ssd MariaDB|Redis
 
 #### always (B)
-	bash rodatudo.sh b ssd
+	bash rodatudo.sh b ssd MariaDB|Redis
 
 #### no (C)
-	bash rodatudo.sh c ssd
+	bash rodatudo.sh c ssd MariaDB|Redis
 
 
 ## Exportando

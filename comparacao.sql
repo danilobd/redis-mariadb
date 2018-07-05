@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Tempo de geração: 21/06/2018 às 10:55
+-- Tempo de geração: 05/07/2018 às 14:52
 -- Versão do servidor: 10.0.34-MariaDB-0ubuntu0.16.04.1
 -- Versão do PHP: 7.0.30-0ubuntu0.16.04.1
 
@@ -39,14 +39,13 @@ CREATE TABLE `coisas` (
 
 CREATE TABLE `resultado` (
   `id` int(11) NOT NULL,
+  `banco` varchar(20) NOT NULL,
   `tipo` varchar(50) NOT NULL,
   `quant_insert` int(11) NOT NULL,
   `rodada` int(11) NOT NULL,
-  `time_redis` double NOT NULL,
-  `time_maria` double NOT NULL,
+  `time` double NOT NULL,
   `metodo` varchar(20) NOT NULL,
   `disk` varchar(20) NOT NULL,
-  `resultado` double NOT NULL,
   `insert_on` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
